@@ -136,3 +136,18 @@ function defaultdashlets_civicrm_preProcess($formName, &$form) {
 }
 
 */
+
+function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaultDashlets){  die(__FILE__.' '.__LINE__);
+	
+	
+	exit;
+	
+   $contactID = CRM_Core_Session::singleton()->get('userID');
+   $defaultDashlets[] = array(
+    'dashboard_id' => 3,
+    'is_active' => 1,
+    'column_no' => 1,
+    'contact_id' => $contactID,
+   );
+   $defaultDashlets = array();
+}

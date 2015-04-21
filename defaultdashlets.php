@@ -139,26 +139,47 @@ function defaultdashlets_civicrm_preProcess($formName, &$form) {
 
 function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaultDashlets){
 	
+	$defaultDashlets = array();
+	
+	$selecteddashlets = CRM_Core_BAO_Setting::getItem('DefaultDashlets', 'defaultdashlets');
+	if (empty($selecteddashlets)) return;
+	
+	$contactID = CRM_Core_Session::singleton()->get('userID');
+	
 	try {
-		$acls = civicrm_api3('AclRole', 'get', array(
-			//~ 'id' => $objectRef->contact_id,
-			//~ 'custom_'.$cfids['api.CustomField.getvalue'] => $county,
+		$groups = civicrm_api3('Contact', 'get', array(
+			'id' => $contactID,
+			'return' => 'group',
 		));
 	} catch (Exception $e) {
 		CRM_Core_Error::debug_log_message(
-			'com.blackbricksoftware.devtraining - '.$e->getMessage()
+			'com.civicon2015.defaultdashlets - '.$e->getMessage()
 		);
 		return;
 	}
+	if (empty($groups['values'])) return;
 	
-	print_r($acls);
-
-	$contactID = CRM_Core_Session::singleton()->get('userID');
-	$defaultDashlets[] = array(
-		'dashboard_id' => 3,
-		'is_active' => 1,
-		'column_no' => 1,
-		'contact_id' => $contactID,
-	);
-	$defaultDashlets = array();
+	foreach ($groups['values'] as $group) {
+		if (!empty($selecteddashlets[$group['id']])) {
+			$group_id = $group['id'];
+			break;
+		}
+	}
+	if (empty($group_id)) return;
+	
+	$i = 0;
+	foreach ($selecteddashlets[$group_id] as $dashlet_id => $dashlets) {
+	
+		$i = $i%2;
+	
+		$defaultDashlets[] = array(
+			'dashboard_id' => $dashlet_id,
+			'is_active' => 1,
+			'column_no' => $i,
+			'contact_id' => $contactID,
+		);
+		
+		$i++;
+	}
+	
 }

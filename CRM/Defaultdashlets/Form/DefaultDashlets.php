@@ -28,6 +28,7 @@ class CRM_Defaultdashlets_Form_DefaultDashlets extends CRM_Core_Form {
 
 	$groups = civicrm_api3('Group', 'get', array(
 		'option.limit' => 0,
+		'group_type' => '1'
 	));
     $this->assign('groups', $groups['values']);
     
@@ -36,13 +37,15 @@ class CRM_Defaultdashlets_Form_DefaultDashlets extends CRM_Core_Form {
 		'option.limit' => 0,
 	));
 	$this->assign('avalabledashlets', $avalabledashlets['values']);
-	echo '<pre>',print_r($avalabledashlets['values'],true),'</pre>';
  
     parent::buildQuickForm();
   }
 
   function postProcess() {
-    //~ $values = $this->exportValues();
+    $values = $this->exportValues();
+
+	echo '<pre>',print_r($values),'</pre>'; exit;
+
     CRM_Core_Session::setStatus(ts('Saved!'));
     parent::postProcess();
   }

@@ -137,17 +137,28 @@ function defaultdashlets_civicrm_preProcess($formName, &$form) {
 
 */
 
-function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaultDashlets){  die(__FILE__.' '.__LINE__);
+function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaultDashlets){
 	
+	try {
+		$acls = civicrm_api3('AclRole', 'get', array(
+			//~ 'id' => $objectRef->contact_id,
+			//~ 'custom_'.$cfids['api.CustomField.getvalue'] => $county,
+		));
+	} catch (Exception $e) {
+		CRM_Core_Error::debug_log_message(
+			'com.blackbricksoftware.devtraining - '.$e->getMessage()
+		);
+		return;
+	}
 	
-	exit;
-	
-   $contactID = CRM_Core_Session::singleton()->get('userID');
-   $defaultDashlets[] = array(
-    'dashboard_id' => 3,
-    'is_active' => 1,
-    'column_no' => 1,
-    'contact_id' => $contactID,
-   );
-   $defaultDashlets = array();
+	print_r($acls);
+
+	$contactID = CRM_Core_Session::singleton()->get('userID');
+	$defaultDashlets[] = array(
+		'dashboard_id' => 3,
+		'is_active' => 1,
+		'column_no' => 1,
+		'contact_id' => $contactID,
+	);
+	$defaultDashlets = array();
 }

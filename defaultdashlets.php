@@ -137,6 +137,50 @@ function defaultdashlets_civicrm_preProcess($formName, &$form) {
 
 */
 
+/**
+ * Implements hook_civicrm_navigationMenu().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
+ */
+
+function defaultdashlets_civicrm_navigationMenu(&$params) {
+ 
+  // Check that our item doesn't already exist
+  $menu_item_search = array('url' => 'civicrm/admin/defaultdashlets');
+  $menu_items = array();
+  CRM_Core_BAO_Navigation::retrieve($menu_item_search, $menu_items);
+ 
+  if ( ! empty($menu_items) ) { 
+    return;
+  }
+ 
+  $navId = CRM_Core_DAO::singleValueQuery("SELECT max(id) FROM civicrm_navigation");
+  if (is_integer($navId)) {
+    $navId++;
+  }
+  // Find the Administer menu to use as parent item @TODO Place this in Customize Data and Screens Submenu
+  $parent_menu = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
+      $params[$parent_menu]['child'][$navId] = array (
+        'attributes' => array (
+          'label' => ts('Default Dashlets',array('domain' => 'com.civicon2015.defaultdashlets')),
+          'name' => 'Default Dashlets',
+          'url' => 'civicrm/admin/defaultdashlets',
+          'permission' => 'administer CiviCRM',
+          'operator' => 'OR',
+          'separator' => 1,
+          'parentID' => $parent_menu,
+          'navID' => $navId,
+          'active' => 1
+    )   
+  );  
+}
+
+/**
+ * Implements hook_civicrm_dashboard_defaults().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_dashboard_defaults
+ */
+ 
 function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaultDashlets){
 	
 	$defaultDashlets = array();

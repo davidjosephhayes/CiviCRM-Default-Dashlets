@@ -174,6 +174,12 @@ function defaultdashlets_civicrm_navigationMenu(&$params) {
     )   
   );  
 }
+
+/**
+ * Implements hook_civicrm_dashboard_defaults().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_dashboard_defaults
+ */
  
 function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaultDashlets){
 	

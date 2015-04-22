@@ -1,5 +1,9 @@
 {* HEADER *}
 
+<div id="help">
+Select the active dashlets for new users of each group. Groups must have <strong>Group Type</strong> set to <strong>Access Control</strong>. This activates dashlets for newly created users only. It will not alter existing users. 
+    </div>
+
 <div class="crm-submit-buttons">
 {include file="CRM/common/formButtons.tpl" location="top"}
 </div>

@@ -2,7 +2,7 @@
 <extension key="com.civicon2015.defaultdashlets" type="module">
   <file>defaultdashlets</file>
   <name>Default Dashlets</name>
-  <description>Set default dashlets</description>
+  <description>Set default dashlets for new users based on group membership</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>David Hayes</author>

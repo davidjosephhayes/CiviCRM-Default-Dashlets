@@ -21,8 +21,8 @@
     <ver>4.2</ver>
   </compatibility>
   <comments>DefaultDashlets creates a settings page at /civicrm/admin/defaultdashlets 
-  that allows administrators to define the active dashlets for new users based 
-  on group membership. 
+  (Administer > Default Dashlets) that allows administrators to define the active 
+  dashlets for new users based on group membership. 
   </comments>
   <civix>
     <namespace>CRM/Defaultdashlets</namespace>

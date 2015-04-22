@@ -7,5 +7,5 @@ Enable the extension and visit /civicrm/admin/defaultdashlets to set default das
 
 ## Good to know
 - Only supports groups that have *Group Type* set to *Access Control*
-- Works on new users only (does not modify existing users)
+- Activates dashlets for newly created users only. Does not alter existing users. 
 

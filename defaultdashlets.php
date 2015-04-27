@@ -183,17 +183,29 @@ function defaultdashlets_civicrm_navigationMenu(&$params) {
  
 function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaultDashlets){
 	
+	// clear default dashlets
 	$defaultDashlets = array();
 	
+	// load dashlets
 	$selecteddashlets = CRM_Core_BAO_Setting::getItem('DefaultDashlets', 'defaultdashlets');
 	if (empty($selecteddashlets)) return;
 	
+	// order selected dashlets
+	foreach ($selecteddashlets as $group_id => &$selecteddashlet) {
+		// sort groups by ordering
+		uasort($selecteddashlet['dashlets'],function($a,$b){
+			if ($a['order']==$b['order']) return 0;
+			return $a['order']>$b['order'] ? 1 : -1;
+		});
+	}
+	//~ print_r($selecteddashlets);
+	
 	$contactID = CRM_Core_Session::singleton()->get('userID');
 	
+	// get list of groups for contact
 	try {
-		$groups = civicrm_api3('Contact', 'get', array(
-			'id' => $contactID,
-			'return' => 'group',
+		$groups = civicrm_api3('GroupContact', 'get', array(
+			'contact_id' => $contactID,
 		));
 	} catch (Exception $e) {
 		CRM_Core_Error::debug_log_message(
@@ -203,27 +215,35 @@ function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaul
 	}
 	if (empty($groups['values'])) return;
 	
+	// sort groups by ordering
+	uasort($groups['values'],function($a,$b)use($selecteddashlets){
+		if (empty($selecteddashlets[$a['group_id']])&&empty($selecteddashlets[$b['group_id']])) return 0;
+		if (!empty($selecteddashlets[$a['group_id']])&&empty($selecteddashlets[$b['group_id']])) return 1;
+		if (empty($selecteddashlets[$a['group_id']])&&!empty($selecteddashlets[$b['group_id']])) return -1;
+		if ($selecteddashlets[$a['group_id']]['order']==$selecteddashlets[$b['group_id']]['order']) return 0;
+		return $selecteddashlets[$a['group_id']]['order']>$selecteddashlets[$b['group_id']]['order'] ? 1 : -1;
+	});
+	//~ print_r($groups['values']);
+	
+	// find which group we are going to use
+	$group_id = 0;
 	foreach ($groups['values'] as $group) {
-		if (!empty($selecteddashlets[$group['id']])) {
-			$group_id = $group['id'];
+		if (!empty($selecteddashlets[$group['group_id']]['dashlets'])) {
+			$group_id = $group['group_id'];
 			break;
 		}
 	}
 	if (empty($group_id)) return;
 	
-	$i = 0;
-	foreach ($selecteddashlets[$group_id] as $dashlet_id => $dashlets) {
-	
-		$i = $i%2;
+	foreach ($selecteddashlets[$group_id]['dashlets'] as $dashlet_id => $settings) {
+		
+		if ($settings['placement']=='-1') continue;
 	
 		$defaultDashlets[] = array(
 			'dashboard_id' => $dashlet_id,
 			'is_active' => 1,
-			'column_no' => $i,
+			'column_no' => $settings['placement'],
 			'contact_id' => $contactID,
 		);
-		
-		$i++;
 	}
-	
 }

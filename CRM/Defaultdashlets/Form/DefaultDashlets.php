@@ -17,7 +17,7 @@ class CRM_Defaultdashlets_Form_DefaultDashlets extends CRM_Core_Form {
 	//~ }
 	
 	function buildQuickForm() {
-		
+	
 	 $this->addButtons(array(
       array(
         'type' => 'submit',
@@ -25,10 +25,16 @@ class CRM_Defaultdashlets_Form_DefaultDashlets extends CRM_Core_Form {
         'isDefault' => TRUE,
       ),
     ));
+    
+    // load settings
+    $defaultdashlets = CRM_Core_BAO_Setting::getItem('DefaultDashlets', 'defaultdashlets');
+	$this->assign('defaultdashlets', $defaultdashlets);
+	//~ echo '<pre>',print_r($defaultdashlets,true),'</pre>';
 
+	// get all acl groups
 	$groups = civicrm_api3('Group', 'get', array(
+		'group_type' => '1',
 		'option.limit' => 0,
-		'group_type' => '1'
 	));
     $this->assign('groups', $groups['values']);
     
@@ -37,9 +43,6 @@ class CRM_Defaultdashlets_Form_DefaultDashlets extends CRM_Core_Form {
 		'option.limit' => 0,
 	));
 	$this->assign('avalabledashlets', $avalabledashlets['values']);
-	
-	$defaultdashlets = CRM_Core_BAO_Setting::getItem('DefaultDashlets', 'defaultdashlets');
-	$this->assign('defaultdashlets', $defaultdashlets);
  
 	$this->assign('elementNames', $this->getRenderableElementNames());
     parent::buildQuickForm();

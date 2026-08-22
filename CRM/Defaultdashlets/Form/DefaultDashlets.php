@@ -27,7 +27,7 @@ class CRM_Defaultdashlets_Form_DefaultDashlets extends CRM_Core_Form {
     ));
     
     // load settings
-    $defaultdashlets = CRM_Core_BAO_Setting::getItem('DefaultDashlets', 'defaultdashlets');
+    $defaultdashlets = Civi::settings()->get('defaultdashlets');
 	$this->assign('defaultdashlets', $defaultdashlets);
 	//~ echo '<pre>',print_r($defaultdashlets,true),'</pre>';
 

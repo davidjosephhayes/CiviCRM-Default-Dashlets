@@ -187,7 +187,7 @@ function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaul
 	$defaultDashlets = array();
 	
 	// load dashlets
-	$selecteddashlets = CRM_Core_BAO_Setting::getItem('DefaultDashlets', 'defaultdashlets');
+	$selecteddashlets = Civi::settings()->get('defaultdashlets');
 	if (empty($selecteddashlets)) return;
 	
 	// order selected dashlets

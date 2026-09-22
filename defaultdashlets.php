@@ -146,8 +146,8 @@ function defaultdashlets_civicrm_preProcess($formName, &$form) {
 function defaultdashlets_civicrm_navigationMenu(&$params) {
  
   // Check that our item doesn't already exist
-  $menu_item_search = array('url' => 'civicrm/admin/defaultdashlets');
-  $menu_items = array();
+  $menu_item_search = ['url' => 'civicrm/admin/defaultdashlets'];
+  $menu_items = [];
   CRM_Core_BAO_Navigation::retrieve($menu_item_search, $menu_items);
  
   if ( ! empty($menu_items) ) { 
@@ -160,9 +160,9 @@ function defaultdashlets_civicrm_navigationMenu(&$params) {
   }
   // Find the Administer menu to use as parent item @TODO Place this in Customize Data and Screens Submenu
   $parent_menu = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
-      $params[$parent_menu]['child'][$navId] = array (
-        'attributes' => array (
-          'label' => ts('Default Dashlets',array('domain' => 'com.civicon2015.defaultdashlets')),
+      $params[$parent_menu]['child'][$navId] = [
+        'attributes' => [
+          'label' => ts('Default Dashlets',['domain' => 'com.civicon2015.defaultdashlets']),
           'name' => 'Default Dashlets',
           'url' => 'civicrm/admin/defaultdashlets',
           'permission' => 'administer CiviCRM',
@@ -171,8 +171,8 @@ function defaultdashlets_civicrm_navigationMenu(&$params) {
           'parentID' => $parent_menu,
           'navID' => $navId,
           'active' => 1
-    )   
-  );  
+    ]
+  ];
 }
 
 /**
@@ -184,7 +184,7 @@ function defaultdashlets_civicrm_navigationMenu(&$params) {
 function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaultDashlets){
 	
 	// clear default dashlets
-	$defaultDashlets = array();
+	$defaultDashlets = [];
 	
 	// load dashlets
 	$selecteddashlets = Civi::settings()->get('defaultdashlets');
@@ -204,9 +204,9 @@ function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaul
 	
 	// get list of groups for contact
 	try {
-		$groups = civicrm_api3('GroupContact', 'get', array(
+		$groups = civicrm_api3('GroupContact', 'get', [
 			'contact_id' => $contactID,
-		));
+		]);
 	} catch (Exception $e) {
 		CRM_Core_Error::debug_log_message(
 			'com.civicon2015.defaultdashlets - '.$e->getMessage()
@@ -239,11 +239,11 @@ function defaultdashlets_civicrm_dashboard_defaults($availableDashlets, &$defaul
 		
 		if ($settings['placement']=='-1') continue;
 	
-		$defaultDashlets[] = array(
+		$defaultDashlets[] = [
 			'dashboard_id' => $dashlet_id,
 			'is_active' => 1,
 			'column_no' => $settings['placement'],
 			'contact_id' => $contactID,
-		);
+		];
 	}
 }

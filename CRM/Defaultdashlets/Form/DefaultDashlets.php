@@ -18,13 +18,13 @@ class CRM_Defaultdashlets_Form_DefaultDashlets extends CRM_Core_Form {
 	
 	function buildQuickForm() {
 	
-	 $this->addButtons(array(
-      array(
+	 $this->addButtons([
+      [
         'type' => 'submit',
         'name' => ts('Submit'),
         'isDefault' => TRUE,
-      ),
-    ));
+      ],
+    ]);
     
     // load settings
     $defaultdashlets = Civi::settings()->get('defaultdashlets');
@@ -32,16 +32,16 @@ class CRM_Defaultdashlets_Form_DefaultDashlets extends CRM_Core_Form {
 	//~ echo '<pre>',print_r($defaultdashlets,true),'</pre>';
 
 	// get all acl groups
-	$groups = civicrm_api3('Group', 'get', array(
+	$groups = civicrm_api3('Group', 'get', [
 		'group_type' => '1',
 		'option.limit' => 0,
-	));
+	]);
     $this->assign('groups', $groups['values']);
     
-	$avalabledashlets = civicrm_api3("Dashboard", "get", array(
+	$avalabledashlets = civicrm_api3("Dashboard", "get", [
 		'domain_id' => CRM_Core_Config::domainID(),
 		'option.limit' => 0,
-	));
+	]);
 	$this->assign('avalabledashlets', $avalabledashlets['values']);
  
 	$this->assign('elementNames', $this->getRenderableElementNames());
@@ -67,7 +67,7 @@ class CRM_Defaultdashlets_Form_DefaultDashlets extends CRM_Core_Form {
     // auto-rendered in the loop -- such as "qfKey" and "buttons".  These
     // items don't have labels.  We'll identify renderable by filtering on
     // the 'label'.
-    $elementNames = array();
+    $elementNames = [];
     foreach ($this->_elements as $element) {
       /** @var HTML_QuickForm_Element $element */
       $label = $element->getLabel();
